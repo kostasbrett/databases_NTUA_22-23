@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Search for a book{% endblock %}</h1>
+  {% if session.username and not session.husername %}
+  <a class="action" href="{{ url_for('main_page') }}">Main Page</a>
+  {% endif %}
+  {% if session.husername %}
+  <a class="action" href="{{ url_for('main_page') }}">Main Page</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="user">Username</label>
+    <input name="user" id="user">
+  </form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Add Books{% endblock %}</h1>
+  {% if session.username %}
+    <a class="action" href="{{ url_for('main_page') }}">Main Page</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    <label for="title">Title</label>
+    <input name="title" id="title" required>
+    <label for="publisher">Publisher</label>
+    <input type="username" name="publisher" id="publisher" required>
+    <label for="ISBN">ISBN</label>
+    <input type="username" name="ISBN" id="ISBN" required>
+    <label for="author">Author</label>
+    <input type="username" name="author" id="author" required>
+    <label for="pages">Pages (must be positive int)</label>
+    <input type="username" name="pages" id="pages" required>
+    <label for="summary">Summary</label>
+    <input type="username" name="summary" id="summary" required>
+    <label for="copies">Copies (must be positive int)</label>
+    <input type="username" name="copies" id="copies" required>
+    <label for="picture">Picture (In string form, base 64 encoding)</label>
+    <input type="username" name="picture" id="picture" required>
+    <label for="theme1">Theme_1</label>
+    <input type="username" name="theme1" id="theme1" required>
+    <label for="theme2">Theme_2 (can be empty)</label>
+    <input type="username" name="theme2" id="theme2">
+    <label for="theme3">Theme_3 (can be empty)</label>
+    <input type="username" name="theme3" id="theme3">
+    <label for="language">Language</label>
+    <input type="username" name="language" id="language" required>
+    <label for="keywords">Keywords</label>
+    <input type="username" name="keywords" id="keywords" required>
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}
+

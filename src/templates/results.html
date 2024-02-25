@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Books{% endblock %}</h1>
+  {% if session.username and not session.husername %}
+    <a class="action" href="{{ url_for('main_page') }}">Main Page</a>
+  {% endif %}
+  {% if session.husername %}
+    <a class="action" href="{{ url_for('main_page') }}">Main Page</a>
+  {% endif %}
+{% endblock %}
+
+
+
+{% block content %}
+  {% for book in books %}
+    <article class="Books">
+      <header>
+        <div>
+          <h1>{{ book['title'] }}</h1>
+          <div class="about"><img src="{{ book['picture'] }}" style="width:132px;height:204px;"/></div>
+          <div class="about">Author : {{ book['author'] }}</div>
+          <div class="about">Publisher : {{ book['publisher'] }}</div>
+          <div class="about">ISBN : {{ book['ISBN'] }}</div>
+          <div class="about">Pages : {{ book['pages'] }}</div>
+          <div class="about">Summary : {{ book['summary'] }}</div>
+          <div class="about">Language : {{ book['blanguage'] }}</div>
+          <div class="about">Keywords : {{ book['keywords'] }}</div>
+          <div class="about">Total copies : {{ book['copies'] }} in school: {{ book['school_name'] }}</div>
+          {% for curr in current %}
+            {% if curr['ISBN'] == book['ISBN'] %}
+                <div class="about">Currently available are : {{ curr['current'] }}</div>
+            {% endif %}
+          {% endfor %}
+          {% for theme in themes %}
+            {% if theme['ISBN'] == book['ISBN'] %}
+                <div class="about">Theme : {{ theme['theme_name'] }}</div>
+            {% endif %}
+          {% endfor %}
+          <p></p>
+          {% for review in reviews %}
+            {% if review['ISBN'] == book['ISBN'] %}
+              {% if review['is_approved'] == 'T' %}
+                {% if review['scale'] == 1 %}
+                <div class="about">User : {{ review['username'] }}, strongly disliked the book and wrote: {{ review['opinion'] }}</div>
+                {% elif review['scale'] == 2 %} 
+                <div class="about">User : {{ review['username'] }}, disliked the book and wrote: {{ review['opinion'] }}</div>
+                {% elif review['scale'] == 3 %} 
+                <div class="about">User : {{ review['username'] }}, was unsure about the book and wrote: {{ review['opinion'] }}</div>
+                {% elif review['scale'] == 4 %} 
+                <div class="about">User : {{ review['username'] }}, liked the book and wrote: {{ review['opinion'] }}</div>
+                {% elif review['scale'] == 5 %} 
+                <div class="about">User : {{ review['username'] }}, strongly liked the book and wrote: {{ review['opinion'] }}</div>
+                {% endif %}
+                <p></p>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if session.husername  %}
+            {% if session.school_id == book['school_id'] %}
+              <a class="action" href="{{ url_for('edit_book', ISBN=book['ISBN']) }}">View and Edit book information</a>
+              <a class="action" href="{{ url_for('view_reviews', ISBN=book['ISBN']) }}">View and Edit Reviews</a>
+              <a class="action" href="{{ url_for('vreservations', ISBN=book['ISBN']) }}">View reservations about this book</a>
+            {% endif %}
+        {% else %}
+          <a class="action" href="{{ url_for('add_review', ISBN=book['ISBN']) }}">Add Review</a>
+          {% for curr in current %}
+            {% if curr['ISBN'] == book['ISBN'] %}
+                <form action="{{ url_for('make_reservation', ISBN=book['ISBN']) }}" method="post">
+                  <input type="submit" value="Make reservation">
+                </form>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
